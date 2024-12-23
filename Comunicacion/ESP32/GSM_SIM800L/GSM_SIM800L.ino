@@ -1,6 +1,8 @@
 /*
-V.1.1
-Este código envía un mensaje de texto "Porvenir" a un número de teléfono (+573...). Verifica la red y la intensidad de la señal, y envía el mensaje cada 30 segundos. El LED se enciende solo durante el envío exitoso.
+V.2.0
+Este código envía un mensaje de texto "Porvenir" al número de teléfono especificado (+573...). 
+Espera un comando (1) desde el monitor serial para iniciar el envío. 
+Muestra mensajes en el monitor serial y controla un LED para indicar el estado del envío.
 */
 
 // Definir el modelo del módem ANTES de incluir TinyGSM
@@ -23,10 +25,6 @@ Este código envía un mensaje de texto "Porvenir" a un número de teléfono (+5
 // Configuración de Serial
 #define SerialMon Serial
 #define SerialAT  Serial1
-
-// Variables de temporización
-unsigned long lastSendTime = 0;
-const unsigned long SEND_INTERVAL = 30000; // 30 segundos
 
 // Configuración del módulo SIM800
 TinyGsm modem(SerialAT);
@@ -60,7 +58,7 @@ void setup() {
 
   // Configurar APN de Claro Colombia
   modem.gprsConnect("internet.comcel.com.co", "comcel", "comcel");
-  
+
   // Verificar si el módem responde
   SerialMon.println("Verificando módem...");
   if(!modem.testAT()) {
@@ -80,29 +78,38 @@ void setup() {
   // Verificar intensidad de señal
   int signalQuality = modem.getSignalQuality();
   SerialMon.println("Intensidad de señal: " + String(signalQuality));
+
+  SerialMon.println("Esperando señal de inicio...");
 }
 
 void loop() {
-  unsigned long currentTime = millis();
+  // Verificar si hay datos en el monitor serial
+  if (SerialMon.available()) {
+    char command = SerialMon.read();
 
-  // Enviar SMS cada 30 segundos
-  if (currentTime - lastSendTime >= SEND_INTERVAL) {
-    lastSendTime = currentTime; // Actualizar tiempo del último envío
+    // Si se recibe el comando '1'
+    if (command == '1') {
+      SerialMon.println("Se recibió el comando: 1");
 
-    // Apagar el LED al inicio del intento de envío
-    digitalWrite(LED_PIN, LOW);
-    
-    // Intentar enviar SMS
-    SerialMon.println("Intentando enviar SMS...");
-    bool smsSent = modem.sendSMS(SMS_TARGET, "Porvenir");
-    
-    if(smsSent) {
-      SerialMon.println("SMS enviado exitosamente");
-      digitalWrite(LED_PIN, HIGH);  // Encender LED solo si se envió el SMS exitosamente
-      delay(1000);                  // Mantener el LED encendido 1 segundo
-      digitalWrite(LED_PIN, LOW);   // Apagar el LED después del envío exitoso
-    } else {
-      SerialMon.println("Error al enviar SMS");
+      // Apagar el LED al inicio del intento de envío
+      digitalWrite(LED_PIN, LOW);
+      
+      // Intentar enviar SMS
+      SerialMon.println("Intentando enviar SMS...");
+      bool smsSent = modem.sendSMS(SMS_TARGET, "Porvenir");
+      
+      if (smsSent) {
+        SerialMon.println("SMS enviado exitosamente");
+        digitalWrite(LED_PIN, HIGH);  // Encender LED solo si se envió el SMS exitosamente
+        delay(1000);                  // Mantener el LED encendido 1 segundo
+        digitalWrite(LED_PIN, LOW);   // Apagar el LED después del envío exitoso
+      } else {
+        SerialMon.println("Error al enviar SMS");
+      }
+
+      // Mostrar mensaje de finalización
+      SerialMon.println("Proceso completado.");
+      SerialMon.println("Esperando señal de inicio...");
     }
   }
 }
