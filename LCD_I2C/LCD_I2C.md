@@ -26,7 +26,7 @@
 | SCL   | D22   |
 
 
-La ESP32 WROOM-32 (devkit) ofrece 3.3 V, por lo que la LCD no visualiza los caracteres de forma clara. Se debe conectar VCC y GND a una fuente externa de 5 V.
+La ESP32 WROOM-32 (devkit) ofrece 3.3 V, por lo que los caracteres de la LCD no visualizan de forma clara, por lo tanto se debe conectar VCC y GND a una fuente externa de 5 V.
 
 # Código básico
 
@@ -56,7 +56,7 @@ Por lo anterior, se debe instalar la librería *LiquidCrystal_PCF8574* by Matthi
 
 ## Códigos para evitar el error
 
-Probé los sigiuentes códigos que funcionaro para evitar la advertencia anterior.
+Se probaron los sigiuentes códigos para evitar la advertencia anterior.
 
 ### Primer código
 
