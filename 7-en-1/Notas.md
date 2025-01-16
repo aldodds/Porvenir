@@ -15,31 +15,30 @@ Sensor JXBS-3001-RS485-Soil 7 en 1
 
 # Conexión 
 
-## Sensor
+## Sensor JXBS-3001-RS485-Soil 7 in 1
 
-| Función       | Color de cable | Especificaciones    |
-|:--------------:|:---------------:|:----------------: |
-| Energía       | Marrón         |Alimentación positiva|
-| Energía       | Negro          |Alimentación negativa|
-| Comunicación  | Amarillo/Gris  |485A                 |
-| Comunicación  | Azul           |485B                 |
+| Función       | Color de cable | Especificaciones     |
+|:-------------:|:--------------:|:--------------------:|
+| Energía       | Marrón         |Alimentación positiva |
+| Energía       | Negro          |Alimentación negativa |
+| Comunicación  | Amarillo/Gris  |485A                  |
+| Comunicación  | Azul           |485B                  |
 
-## Módulo convertidor
+## Módulo convertidor XY-485
 
-| Cable del sensor | Módulo|
-|:--------------:|:--------------:|
-Amarillo | A+ |
-Azul     | B- |
-Tierra   | Vacío/Tierra |
+| Cable del sensor JXBS-3001-RS485-Soil 7 in 1| Módulo XY-485|
+|:-------------------------------------------:|:-------------:|
+| Amarillo                                    | A+            |
+| Azul                                        | B-            |
 
-## Módulo convertidor a microcontrolador
+## Módulo convertidor XY-485 a Arduino UNO
 
-| Módulo | Arduino UNO |
-|:--------------:|:--------------:|
- VCC | VCC |
- GND | GND |
- TX  |  0/2/10 |
- RX  |  1/3/11 |
+| Módulo          | Arduino UNO |
+|:---------------:|:-----------:|
+| 3.3 V - 33 V    | 5 V         |
+| GND             | GND         |
+| TX              | 0/2/10      |
+| RX              | 1/3/11      |
 
 # Configuraciones del sensor
 * Baud rate: 2400/4800/9600 (por defecto)
