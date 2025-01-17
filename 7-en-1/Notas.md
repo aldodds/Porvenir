@@ -55,6 +55,14 @@ Sensor JXBS-3001-RS485-Soil 7 en 1
 * pH `0x0006`.
 * Nitrógeno, fósforo y potasio `0x001E, 0x001F, 0x0020`.
 
+# ESP32
+
++ Cambiar el uso de SoftwareSerial, ya que la ESP32 cuenta con múltiples puertos UART hardware.
++ Usaremos el puerto Serial2 (UART2), que está disponible en la mayoría de las placas ESP32. Por defecto, puedes asignar los siguientes pines:
+  + TX: GPIO17
+  + RX: GPIO16
++ Si se necesita usar pines diferentes, se puede configurar dinámicamente al inicializar Serial2.
+
 # Códigos para el IDE de Arduino
 
 ## Verificar frame Modbus
@@ -363,6 +371,154 @@ void setup() {
 
   // Configuración del objeto Modbus
   node.begin(1, RS485); // Dirección del sensor = 1, puerto RS485 virtual
+
+  Serial.println("Lectura de las 7 variables del sensor JXBS-3001-RS485-Soil 7 en 1");
+}
+
+void loop() {
+  uint8_t result;
+  uint16_t data;
+
+  // 1. Humedad del suelo (registro 0x0012)
+  result = node.readHoldingRegisters(0x0012, 1);
+  if (result == node.ku8MBSuccess) {
+    data = node.getResponseBuffer(0);
+    Serial.print("Humedad (%): ");
+    Serial.println(data * 0.1); // Conversión según documentación
+  } else {
+    Serial.println("Error al leer humedad.");
+  }
+
+  // 2. Temperatura del suelo (registro 0x0013)
+  result = node.readHoldingRegisters(0x0013, 1);
+  if (result == node.ku8MBSuccess) {
+    data = node.getResponseBuffer(0);
+    float temperature = (int16_t)data * 0.1; // Manejar valores negativos
+    Serial.print("Temperatura (°C): ");
+    Serial.println(temperature);
+  } else {
+    Serial.println("Error al leer temperatura.");
+  }
+
+  // 3. Conductividad eléctrica (registro 0x0015)
+  result = node.readHoldingRegisters(0x0015, 1);
+  if (result == node.ku8MBSuccess) {
+    data = node.getResponseBuffer(0);
+    Serial.print("Conductividad (uS/cm): ");
+    Serial.println(data);
+  } else {
+    Serial.println("Error al leer conductividad.");
+  }
+
+  // 4. pH del suelo (registro 0x0006)
+  result = node.readHoldingRegisters(0x0006, 1);
+  if (result == node.ku8MBSuccess) {
+    data = node.getResponseBuffer(0);
+    Serial.print("pH: ");
+    Serial.println(data * 0.01); // Conversión según documentación
+  } else {
+    Serial.println("Error al leer pH.");
+  }
+
+  // 5. Nitrógeno (registro 0x001E)
+  result = node.readHoldingRegisters(0x001E, 1);
+  if (result == node.ku8MBSuccess) {
+    data = node.getResponseBuffer(0);
+    Serial.print("Nitrógeno (mg/kg): ");
+    Serial.println(data);
+  } else {
+    Serial.println("Error al leer nitrógeno.");
+  }
+
+  // 6. Fósforo (registro 0x001F)
+  result = node.readHoldingRegisters(0x001F, 1);
+  if (result == node.ku8MBSuccess) {
+    data = node.getResponseBuffer(0);
+    Serial.print("Fósforo (mg/kg): ");
+    Serial.println(data);
+  } else {
+    Serial.println("Error al leer fósforo.");
+  }
+
+  // 7. Potasio (registro 0x0020)
+  result = node.readHoldingRegisters(0x0020, 1);
+  if (result == node.ku8MBSuccess) {
+    data = node.getResponseBuffer(0);
+    Serial.print("Potasio (mg/kg): ");
+    Serial.println(data);
+  } else {
+    Serial.println("Error al leer potasio.");
+  }
+
+  Serial.println("----------------------------");
+  delay(2000); // Esperar 2 segundos antes de la próxima lectura
+}
+```
+## ESP32
+
+### Primer código
+
+```c++
+#include <ModbusMaster.h>
+
+// Definición del puerto serie hardware
+#define RXD2 16
+#define TXD2 17
+
+// Declaración del objeto Modbus
+ModbusMaster node;
+
+void setup() {
+  // Configuración de comunicación serial
+  Serial.begin(9600);  // Monitor serial
+  Serial2.begin(9600, SERIAL_8N1, RXD2, TXD2); // Puerto RS485
+  
+  // Configuración del objeto Modbus
+  node.begin(1, Serial2);  // Dirección del sensor = 1, puerto hardware Serial2
+  
+  Serial.println("Lectura de las 7 variables del sensor JXBS-3001-RS485-Soil 7 en 1");
+}
+```
+El resto del código se mantiene igual. Solo cambia la inicialización.
+
+### Solo lectura
+
+```c++
+#include <ModbusMaster.h>
+
+#define RXD2 16  // Solo necesitamos el pin RX
+
+ModbusMaster node;
+
+void setup() {
+  Serial.begin(9600);  // Monitor serial
+  Serial2.begin(9600, SERIAL_8N1, RXD2, -1);  // El -1 indica que no usaremos TX
+  
+  node.begin(1, Serial2);
+  Serial.println("Iniciando lectura del sensor...");
+}
+```
+El resto del código se mantiene igual. Solo cambia la inicialización.
+
+### Otra opción ajutado sin pines de control
+
+```c++
+#include <ModbusMaster.h>
+
+// Configuración de pines UART para la ESP32
+#define RS485_TX 17 // GPIO17 (TX)
+#define RS485_RX 16 // GPIO16 (RX)
+
+// Declaración del objeto Modbus
+ModbusMaster node;
+
+void setup() {
+  // Configuración de comunicación serial
+  Serial.begin(9600);          // Monitor serial
+  Serial2.begin(9600, SERIAL_8N1, RS485_RX, RS485_TX); // UART hardware para RS485
+
+  // Configuración del objeto Modbus
+  node.begin(1, Serial2); // Dirección del sensor = 1, usando Serial2
 
   Serial.println("Lectura de las 7 variables del sensor JXBS-3001-RS485-Soil 7 en 1");
 }
