@@ -35,7 +35,7 @@ Sensor JXBS-3001-RS485-Soil 7 en 1
 
 | Módulo          | Arduino UNO |
 |:---------------:|:-----------:|
-| 3.3 V - 33 V    | 5 V         |
+| VCC             | 5 V         |
 | GND             | GND         |
 | TX              | 0/2/10      |
 | RX              | 1/3/11      |
@@ -62,6 +62,15 @@ Sensor JXBS-3001-RS485-Soil 7 en 1
   + TX: GPIO17
   + RX: GPIO16
 + Si se necesita usar pines diferentes, se puede configurar dinámicamente al inicializar Serial2.
+
+## Conexiones ESP32
+
+| Módulo          | ESP32       |
+|:---------------:|:-----------:|
+| VCC             | 3.3 V       |
+| GND             | GND         |
+| TXD             | D17         |
+| RXD             | D16         |
 
 # Códigos para el IDE de Arduino
 
