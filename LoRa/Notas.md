@@ -611,3 +611,81 @@ void loop() {
 }
 
 ```
+
+# ESP32
+
+## Conexiones
+
+| Ra-02 | ESP32  |
+|:--------------:|:--------------:|
+| GND   | GND    |
+| 3.3 V | 3.3 V  |
+| RST   | GPIO14 |
+| NSS   | GPIO5  |
+| MOSI  | GPIO23 |
+| MISO  | GPIO19 |
+| SCK   | GPIO18 |
+| DIO0  | GPIO26 |
+
+## Código de verificación de módulo Ra-02
+
+```c++
+#include <SPI.h> // include libraries
+#include <LoRa.h>
+
+void setup() {
+  Serial.begin(9600); // initialize serial
+  while (!Serial);
+
+  Serial.println("LoRa Dump Registers");
+
+  // Define los pines CS, reset y DIO0
+  LoRa.setPins(5, 14, 26); // CS -> GPIO5, reset -> GPIO14, IRQ(DIO0) -> GPIO26
+
+  if (!LoRa.begin(433E6)) { // inicializa el módulo LoRa a 433 MHz
+    Serial.println("LoRa init failed. Check your connections.");
+    while (true); // si falla, detenerse
+  }
+
+  LoRa.dumpRegisters(Serial);
+}
+
+void loop() {
+}
+```
+
+```C++
+#include <SPI.h>
+#include <LoRa.h>
+
+// Define los pines utilizados
+#define SS_PIN    5    // NSS
+#define RST_PIN   14   // Reset
+#define DIO0_PIN  2    // DIO0
+
+void setup() {
+  Serial.begin(9600);
+  while (!Serial);
+
+  Serial.println("LoRa Dump Registers");
+
+  // Configura los pines del módulo LoRa
+  LoRa.setPins(SS_PIN, RST_PIN, DIO0_PIN);
+
+  if (!LoRa.begin(433E6)) {
+    Serial.println("LoRa init failed. Check your connections.");
+    while (true);
+  }
+
+  LoRa.dumpRegisters(Serial);
+}
+
+void loop() {
+}
+```
+
+Los pines SPI (MISO, MOSI, SCK) no necesitan ser definidos explícitamente porque el ESP32 usa pines fijos para SPI:
+
++ MISO: GPIO19
++ MOSI: GPIO23
++ SCK: GPIO18
