@@ -20,11 +20,10 @@
 
 | ESP32 | FC-113 |
 |:-------------:|:--------------:|
-| GND   | GND   |
-| VCC   | 5 V   |
-| SDA   | D21   |
-| SCL   | D22   |
-
+| GND    | GND   |
+| 3.3 V  | VCC   |
+| GPIO21 | SDA   |
+| GPIO22 | SCL   |
 
 La ESP32 WROOM-32 (devkit) ofrece 3.3 V, por lo que los caracteres de la LCD no visualizan de forma clara, por lo tanto se debe conectar VCC y GND a una fuente externa de 5 V.
 
