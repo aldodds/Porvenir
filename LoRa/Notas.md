@@ -629,6 +629,7 @@ void loop() {
 
 ## Código de verificación de módulo Ra-02
 
+### Primera versión
 ```c++
 #include <SPI.h> // include libraries
 #include <LoRa.h>
@@ -654,6 +655,7 @@ void loop() {
 }
 ```
 
+### Segunda versión
 ```C++
 #include <SPI.h>
 #include <LoRa.h>
