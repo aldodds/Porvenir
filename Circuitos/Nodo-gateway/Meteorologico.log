@@ -1,0 +1,14 @@
+# Writing all output to: G:\Mi unidad\Mi_informacion\Minciencia_postdoc_934\Circuitos\Meteorologico\Meteorologico.log
+Nets shorting at pin
+Nets shorting at pin
+set pad_wire_necking on
+bus diagonal
+fanout 5
+route 50
+clean 2
+route 50 16
+clean 2
+filter 5
+recorner diagonal
+status_file
+
