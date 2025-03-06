@@ -621,11 +621,13 @@ void loop() {
 | GND   | GND    |
 | 3.3 V | 3.3 V  |
 | RST   | GPIO14 |
-| NSS   | GPIO5  |
+| NSS   | GPIO5/15*  |
 | MOSI  | GPIO23 |
 | MISO  | GPIO19 |
 | SCK   | GPIO18 |
-| DIO0  | GPIO26 |
+| DIO0  | GPIO26/25* |
+
+*Cambio de pines cuando se usa con el módulo LoRa SX1278 Ra-02
 
 ## Código de verificación de módulo Ra-02
 
