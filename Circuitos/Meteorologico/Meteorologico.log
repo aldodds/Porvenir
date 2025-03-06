@@ -1,4 +1,4 @@
-# Writing all output to: G:\Mi unidad\Mi_informacion\Minciencia_postdoc_934\Circuitos\Meteorologico\Meteorologico.log
+# Writing all output to: G:\Mi unidad\Mi_informacion\Minciencia_postdoc_934\Porvenir\Circuitos\Meteorologico\Meteorologico.log
 set pad_wire_necking on
 bus diagonal
 fanout 5
@@ -7,3 +7,5 @@ clean 2
 route 50 16
 clean 2
 filter 5
+recorner diagonal
+status_file
