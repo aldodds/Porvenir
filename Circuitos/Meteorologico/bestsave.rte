@@ -80,17 +80,17 @@
    (Net #00003 
    (rule
    )
+   (wire (path BOT 76200  -6762000 9000000 -7048500 9000000 -7048500 8504000)
+    (connect (terminal pin D2-1) (terminal wire))
+   )
+   (wire (path BOT 76200  -7048500 8504000 -7750000 8504000)
+    (connect (terminal wire) (terminal pin C1-1))
+   )
+   (wire (path BOT 76200  -6666000 8479000 -6666000 8504000 -7048500 8504000)
+    (connect (terminal pin 5V-2) (terminal wire))
+   )
    (wire (path BOT 76200  -8238000 8500000 -8238000 8504000 -7750000 8504000)
     (connect (terminal pin D1-1) (terminal pin C1-1))
-   )
-   (wire (path BOT 101600  -7750000 8504000 -7728431 8498888 -7666371 8494161
-     -7436656 8486226 -7092613 8480929 -6666000 8479000)
-    (connect (terminal pin C1-1) (terminal pin 5V-2))
-    (type protect)
-   )
-   (wire (path BOT 101600  -6666000 8479000 -6762000 8575000 -6762000 9000000)
-    (connect (terminal pin 5V-2) (terminal pin D2-1))
-    (type protect)
    )
    )
    (Net +12 
@@ -103,15 +103,17 @@
    (Net 3.3V 
    (rule
    )
-   (wire (path BOT 76200  -2750000 8250000 -2286000 8250000 -2286000 8000000
-     -2000000 8000000)
-    (connect (terminal pin C6POL-0) (terminal pin U2-2))
+   (wire (path BOT 76200  -1500000 8000000 -1206500 8000000 -1206500 9000000
+     -3250000 9000000)
+    (connect (terminal pin "LORA SX1278 RA-02"-2) (terminal pin D3-0))
    )
-   (wire (path BOT 76200  -3916000 8250000 -3916000 8254000 -3250000 8254000)
+   (wire (path BOT 76200  -1500000 8000000 -1884577 8000000 -1884577 8250000
+     -2750000 8250000)
+    (connect (terminal pin "LORA SX1278 RA-02"-2) (terminal pin C6POL-0))
+   )
+   (wire (path BOT 76200  -3916000 8250000 -3492500 8250000 -3492500 8254000
+     -3250000 8254000)
     (connect (terminal pin 3.3V-1) (terminal pin C5-1))
-   )
-   (wire (path BOT 76200  -3250000 8254000 -3250000 8250000 -2750000 8250000)
-    (connect (terminal pin C5-1) (terminal pin C6POL-0))
    )
    (wire (path BOT 76200  -3250000 8254000 -3250000 9000000)
     (connect (terminal pin C5-1) (terminal pin D3-0))
@@ -120,38 +122,30 @@
    (Net 5V 
    (rule
    )
-   (wire (path BOT 76200  -5842000 7302500 -5500000 7302500 -5500000 5400000)
-    (connect (terminal wire) (terminal pin U1-39))
+   (wire (path BOT 76200  -5000000 4900000 -5000000 7500000 -7000000 7500000)
+    (connect (terminal pin "ESP32 SIM 800"-39) (terminal pin R2-0))
    )
-   (wire (path BOT 76200  -5842000 7302500 -6540500 7302500 -6540500 7500000
-     -7000000 7500000)
-    (connect (terminal wire) (terminal pin R2-0))
+   (wire (path BOT 76200  -7000000 7500000 -7000000 8250000 -6666000 8250000)
+    (connect (terminal pin R2-0) (terminal pin 5V-1))
    )
-   (wire (path BOT 76200  -5778500 8250000 -5778500 7874000 -5842000 7874000
-     -5842000 7302500)
-    (connect (terminal wire) (terminal wire))
+   (wire (path BOT 76200  -4750000 9250000 -4750000 9000000 -4012000 9000000)
+    (connect (terminal pin CON-5V-2) (terminal pin D3-1))
    )
-   (wire (path BOT 76200  -6666000 8250000 -6223000 8250000 -6223000 8254000
-     -6000000 8254000)
-    (connect (terminal pin 5V-1) (terminal pin C2-1))
+   (wire (path BOT 76200  -6000000 8254000 -6413500 8254000 -6413500 8250000
+     -6666000 8250000)
+    (connect (terminal pin C2-1) (terminal pin 5V-1))
+   )
+   (wire (path BOT 76200  -6000000 8254000 -6000000 8250000 -5500000 8250000)
+    (connect (terminal pin C2-1) (terminal pin C3POL-0))
    )
    (wire (path BOT 76200  -5500000 8250000 -5500000 8254000 -5000000 8254000)
     (connect (terminal pin C3POL-0) (terminal pin C4-1))
    )
-   (wire (path BOT 76200  -5778500 8250000 -5778500 8572500 -6000000 8572500)
-    (connect (terminal wire) (terminal wire))
+   (wire (path BOT 76200  -5000000 8254000 -5000000 9250000)
+    (connect (terminal pin C4-1) (terminal pin CON-5V-1))
    )
-   (wire (path BOT 76200  -6000000 8572500 -6000000 8254000)
-    (connect (terminal wire) (terminal pin C2-1))
-   )
-   (wire (path BOT 76200  -7000000 7500000 -7500000 7500000)
-    (connect (terminal pin R2-0) (terminal pin R1-0))
-   )
-   (wire (path BOT 76200  -6000000 9000000 -6000000 8572500)
-    (connect (terminal pin D2-0) (terminal wire))
-   )
-   (wire (path BOT 76200  -5778500 8250000 -5500000 8250000)
-    (connect (terminal wire) (terminal pin C3POL-0))
+   (wire (path BOT 76200  -7500000 7500000 -7000000 7500000)
+    (connect (terminal pin R1-0) (terminal pin R2-0))
    )
    (wire (path BOT 76200  -5000000 9250000 -4750000 9250000)
     (connect (terminal pin CON-5V-1) (terminal pin CON-5V-2))
@@ -159,99 +153,84 @@
    (wire (path BOT 76200  -5250000 9250000 -5000000 9250000)
     (connect (terminal pin CON-5V-0) (terminal pin CON-5V-1))
    )
-   (wire (path BOT 101600  -4750000 9250000 -4262000 9250000 -4012000 9000000)
-    (connect (terminal pin CON-5V-2) (terminal pin D3-1))
+   (wire (path BOT 101600  -4012000 9000000 -3916000 8904000 -3916000 8699500)
+    (connect (terminal pin D3-1) (terminal wire))
     (type protect)
    )
-   (wire (path BOT 101600  -6000000 9000000 -5750000 9250000 -5250000 9250000)
-    (connect (terminal pin D2-0) (terminal pin CON-5V-0))
+   (wire (path BOT 101600  -5500000 9250000 -5250000 9250000)
+    (connect (terminal wire) (terminal pin CON-5V-0))
     (type protect)
    )
-   (wire (path BOT 101600  -4012000 9000000 -3916000 8904000 -3916000 8479000)
-    (connect (terminal pin D3-1) (terminal pin 3.3V-2))
+   (wire (path BOT 101600  -3916000 8636000 -3916000 8479000)
+    (connect (terminal wire) (terminal pin 3.3V-2))
+    (type protect)
+   )
+   (wire (path BOT 101600  -6000000 9000000 -5750000 9250000 -5500000 9250000)
+    (connect (terminal pin D2-0) (terminal wire))
+    (type protect)
+   )
+   (wire (path BOT 101600  -3916000 8699500 -3916000 8636000)
+    (connect (terminal wire) (terminal wire))
     (type protect)
    )
    )
    (Net DIO0 
    (rule
    )
-   (wire (path BOT 76200  -2000000 7500000 -3000000 7500000 -3000000 5400000)
-    (connect (terminal pin U2-4) (terminal pin U1-29))
+   (wire (path BOT 76200  -1500000 7500000 -2500000 7500000 -2500000 4900000)
+    (connect (terminal pin "LORA SX1278 RA-02"-4) (terminal pin "ESP32 SIM 800"-29))
    )
    )
    (Net GND 
    (rule
    )
-   (wire (path BOT 76200  -825500 8191500 -825500 5143500 -4250000 5143500)
-    (connect (terminal wire) (terminal wire))
+   (wire (path BOT 76200  -9750000 6750000 -10350500 6750000 -10350500 2857500
+     -2000000 2857500 -2000000 2250000)
+    (connect (terminal pin CON-GND-0) (terminal pin "ESP32 SIM 800"-14))
    )
-   (wire (path BOT 76200  -6223000 5143500 -6223000 2540000 -2500000 2540000
-     -2500000 2750000)
-    (connect (terminal wire) (terminal pin U1-14))
+   (wire (path BOT 76200  -3750000 4900000 -3750000 4572000 -5842000 4572000
+     -5842000 7120287 -7750000 7120287 -7750000 8250000)
+    (connect (terminal pin "ESP32 SIM 800"-34) (terminal pin C1-0))
    )
-   (wire (path BOT 76200  -6223000 5143500 -6223000 6794500 -8953500 6794500
-     -8953500 6750000 -9750000 6750000)
-    (connect (terminal wire) (terminal pin CON-GND-0))
+   (wire (path BOT 76200  -1500000 8250000 -1778000 8250000 -1778000 8445500
+     -2921000 8445500 -2921000 8001000)
+    (connect (terminal pin "LORA SX1278 RA-02"-1) (terminal wire))
    )
-   (wire (path BOT 76200  -4250000 5400000 -4250000 7387650 -3916000 7387650
+   (wire (path BOT 76200  -3750000 4900000 -3750000 5434461 -3916000 5434461
      -3916000 8021001)
-    (connect (terminal pin U1-34) (terminal pin 3.3V-0))
+    (connect (terminal pin "ESP32 SIM 800"-34) (terminal pin 3.3V-0))
    )
-   (wire (path BOT 76200  500000 8500000 -825500 8500000 -825500 8191500)
-    (connect (terminal pin U2-15) (terminal wire))
+   (wire (path BOT 76200  -6000000 8000000 -6000000 8021000 -6666000 8021000)
+    (connect (terminal pin C2-0) (terminal pin 5V-0))
    )
-   (wire (path BOT 76200  -825500 8191500 -1587500 8191500 -1587500 8250000
-     -2000000 8250000)
-    (connect (terminal wire) (terminal pin U2-1))
+   (wire (path BOT 76200  -5500000 7996000 -5500000 8000000 -6000000 8000000)
+    (connect (terminal pin C3POL-1) (terminal pin C2-0))
    )
    (wire (path BOT 76200  -5000000 8000000 -5000000 7996000 -5500000 7996000)
     (connect (terminal pin C4-0) (terminal pin C3POL-1))
    )
-   (wire (path BOT 76200  -3250000 8000000 -3250000 7996000 -2750000 7996000)
-    (connect (terminal pin C5-0) (terminal pin C6POL-1))
+   (wire (path BOT 76200  -2750000 7996000 -2750000 8001000 -2921000 8001000)
+    (connect (terminal pin C6POL-1) (terminal wire))
+   )
+   (wire (path BOT 76200  -3250000 8000000 -3250000 8001000 -2921000 8001000)
+    (connect (terminal pin C5-0) (terminal wire))
    )
    (wire (path BOT 76200  -9750000 8250000 -7750000 8250000)
     (connect (terminal pin BATERIA-0) (terminal pin C1-0))
    )
-   (wire (path BOT 76200  -6223000 5143500 -4250000 5143500)
-    (connect (terminal wire) (terminal wire))
+   (wire (path BOT 76200  -9750000 7250000 -9750000 8250000)
+    (connect (terminal pin CON-GND-2) (terminal pin BATERIA-0))
    )
-   (wire (path BOT 76200  -2500000 2750000 -2500000 3048000 -1000000 3048000
-     -1000000 2750000)
-    (connect (terminal pin U1-14) (terminal pin U1-20))
+   (wire (path BOT 76200  -9750000 7000000 -9750000 7250000)
+    (connect (terminal pin CON-GND-1) (terminal pin CON-GND-2))
    )
-   (wire (path BOT 76200  -9750000 8250000 -9750000 7810500 -9749999 7810500
-     -9749999 7636839 -9750000 7636839 -9750000 7250000)
-    (connect (terminal pin BATERIA-0) (terminal pin CON-GND-2))
+   (wire (path BOT 76200  -9750000 6750000 -9750000 7000000)
+    (connect (terminal pin CON-GND-0) (terminal pin CON-GND-1))
    )
-   (wire (path BOT 76200  -4250000 5143500 -4250000 5400000)
-    (connect (terminal wire) (terminal pin U1-34))
+   (wire (path BOT 76200  -1500000 8500000 -1500000 8250000)
+    (connect (terminal pin "LORA SX1278 RA-02"-0) (terminal pin "LORA SX1278 RA-02"-1))
    )
-   (wire (path BOT 76200  -9750000 7250000 -9461500 7250000 -9461500 7000000
-     -9750000 7000000)
-    (connect (terminal pin CON-GND-2) (terminal pin CON-GND-1))
-   )
-   (wire (path BOT 76200  -9750000 7000000 -9750000 6750000)
-    (connect (terminal pin CON-GND-1) (terminal pin CON-GND-0))
-   )
-   (wire (path BOT 76200  -2000000 8250000 -2000000 8500000)
-    (connect (terminal pin U2-1) (terminal pin U2-0))
-   )
-   (wire (path BOT 101600  -3916000 8021000 -3916000 8021001)
-    (connect (terminal wire) (terminal pin 3.3V-0))
-    (type protect)
-   )
-   (wire (path BOT 101600  -3916000 8021000 -3937569 8016707 -3999629 8012736
-     -4229344 8006070 -5000000 8000000)
-    (connect (terminal wire) (terminal pin C4-0))
-    (type protect)
-   )
-   (wire (path BOT 101600  -6666000 8021000 -6652748 8016706 -6614619 8012735
-     -6473484 8006070 -6000000 8000000)
-    (connect (terminal pin 5V-0) (terminal pin C2-0))
-    (type protect)
-   )
-   (wire (path BOT 101600  -3916000 8021000 -3902748 8016706 -3879349 8014269)
+   (wire (path BOT 76200  -3916000 8021000 -3882058 8015608 -3879349 8014269)
     (connect (terminal wire) (terminal wire))
     (type protect)
    )
@@ -260,100 +239,105 @@
     (connect (terminal wire) (terminal pin C5-0))
     (type protect)
    )
-   (wire (path BOT 76200  -3916000 8021000 -3882058 8015608 -3879349 8014269)
+   (wire (path BOT 101600  -3916000 8021000 -3902748 8016706 -3879349 8014269)
     (connect (terminal wire) (terminal wire))
     (type protect)
    )
-   (wire (path BOT 101600  -7750000 8250000 -7521000 8021000 -6666000 8021000)
-    (connect (terminal pin C1-0) (terminal pin 5V-0))
+   (wire (path BOT 101600  -5000000 8000000 -4229344 8006070 -3999629 8012736
+     -3937569 8016707 -3916000 8021000)
+    (connect (terminal pin C4-0) (terminal wire))
+    (type protect)
+   )
+   (wire (path BOT 101600  -3916000 8021000 -3916000 8021001)
+    (connect (terminal wire) (terminal pin 3.3V-0))
     (type protect)
    )
    )
    (Net MISO 
    (rule
    )
-   (wire (path BOT 76200  500000 7750000 635000 7750000 635000 4127500
-     -2750000 4127500 -2750000 2750000)
-    (connect (terminal pin U2-12) (terminal pin U1-13))
+   (wire (path BOT 76200  1000000 7750000 317500 7750000 317500 2095500
+     -2250000 2095500 -2250000 2250000)
+    (connect (terminal pin "LORA SX1278 RA-02"-12) (terminal pin "ESP32 SIM 800"-13))
    )
    )
    (Net MOSI 
    (rule
    )
-   (wire (path BOT 76200  500000 8000000 889000 8000000 889000 2413000
-     -1250000 2413000 -1250000 2750000)
-    (connect (terminal pin U2-13) (terminal pin U1-19))
+   (wire (path BOT 76200  -750000 2250000 -750000 3037740 -154607 3037740
+     -154607 8000000 1000000 8000000)
+    (connect (terminal pin "ESP32 SIM 800"-19) (terminal pin "LORA SX1278 RA-02"-13))
    )
    )
    (Net NSS 
    (rule
    )
-   (wire (path BOT 76200  500000 8250000 -63500 8250000 -63500 4889500
-     -4750000 4889500 -4750000 2750000)
-    (connect (terminal pin U2-14) (terminal pin U1-5))
+   (wire (path BOT 76200  -4250000 2250000 -4250000 1714500 1270000 1714500
+     1270000 8250000 1000000 8250000)
+    (connect (terminal pin "ESP32 SIM 800"-5) (terminal pin "LORA SX1278 RA-02"-14))
    )
    )
    (Net RST 
    (rule
    )
-   (wire (path BOT 76200  -2000000 7750000 -3750000 7750000 -3750000 5400000)
-    (connect (terminal pin U2-3) (terminal pin U1-32))
+   (wire (path BOT 76200  -1500000 7750000 -3250000 7750000 -3250000 4900000)
+    (connect (terminal pin "LORA SX1278 RA-02"-3) (terminal pin "ESP32 SIM 800"-32))
    )
    )
    (Net RX 
    (rule
    )
-   (wire (path BOT 76200  -9750000 3500000 -9750000 2159000 -1750000 2159000
-     -1750000 2750000)
-    (connect (terminal pin UART-0) (terminal pin U1-17))
+   (wire (path BOT 76200  -9750000 3500000 -9906000 3500000 -9906000 3937000
+     -1250000 3937000 -1250000 2250000)
+    (connect (terminal pin UART-0) (terminal pin "ESP32 SIM 800"-17))
    )
    )
    (Net SCK 
    (rule
    )
-   (wire (path BOT 76200  500000 7500000 190500 7500000 190500 4442814
-     -3000000 4442814 -3000000 2750000)
-    (connect (terminal pin U2-11) (terminal pin U1-12))
+   (wire (path BOT 76200  -2500000 2250000 -2500000 1968500 698500 1968500
+     698500 7500000 1000000 7500000)
+    (connect (terminal pin "ESP32 SIM 800"-12) (terminal pin "LORA SX1278 RA-02"-11))
    )
    )
    (Net SCL 
    (rule
    )
-   (wire (path BOT 76200  -7000000 6484000 -7000000 6667500 -8141578 6667500
-     -8141578 6350000 -10160000 6350000 -10160000 1905000 -1500000 1905000
-     -1500000 2750000)
-    (connect (terminal pin R2-1) (terminal pin U1-18))
+   (wire (path BOT 76200  -9750000 4500000 -10096500 4500000 -10096500 6302299
+     -9392537 6302299 -9392537 6794500 -6410718 6794500 -6410718 4191000
+     -1000000 4191000 -1000000 2250000)
+    (connect (terminal pin "SENSOR UV"-0) (terminal pin "ESP32 SIM 800"-18))
    )
-   (wire (path BOT 76200  -7000000 6484000 -7000000 4750000 -9750000 4750000)
-    (connect (terminal pin R2-1) (terminal pin SCL-1))
+   (wire (path BOT 76200  -9750000 5500000 -7000000 5500000 -7000000 6484000)
+    (connect (terminal pin LCD-0) (terminal pin R2-1))
    )
-   (wire (path BOT 76200  -9750000 4750000 -9750000 4500000)
-    (connect (terminal pin SCL-1) (terminal pin SCL-0))
+   (wire (path BOT 76200  -9750000 4500000 -9461500 4500000 -9461500 5207000
+     -9750000 5207000 -9750000 5500000)
+    (connect (terminal pin "SENSOR UV"-0) (terminal pin LCD-0))
    )
    )
    (Net SDA 
    (rule
    )
-   (wire (path BOT 76200  -9750000 5500000 -9906000 5500000 -9906000 4191000
-     -7383474 4191000 -7383474 2413000 -2250000 2413000 -2250000 2750000)
-    (connect (terminal pin SDA-0) (terminal pin U1-15))
+   (wire (path BOT 76200  -7500000 6484000 -7500000 6667500 -6794500 6667500
+     -6794500 4318000 -10033000 4318000 -10033000 3111500 -1750000 3111500
+     -1750000 2250000)
+    (connect (terminal pin R1-1) (terminal pin "ESP32 SIM 800"-15))
    )
-   (wire (path BOT 101600  -9750000 5750000 -9750000 5500000)
-    (connect (terminal pin SDA-1) (terminal pin SDA-0))
-    (type protect)
+   (wire (path BOT 76200  -9750000 5750000 -7937500 5750000 -7937500 6484000
+     -7500000 6484000)
+    (connect (terminal pin LCD-1) (terminal pin R1-1))
    )
-   (wire (path BOT 76200  -7500000 6484000 -7500000 6000000 -7750000 5750000
+   (wire (path BOT 76200  -9750000 4750000 -9969500 4750000 -9969500 5750000
      -9750000 5750000)
-    (connect (terminal pin R1-1) (terminal pin SDA-1))
-    (type protect)
+    (connect (terminal pin "SENSOR UV"-1) (terminal pin LCD-1))
    )
    )
    (Net TX 
    (rule
    )
-   (wire (path BOT 76200  -9750000 3750000 -9363857 3750000 -9363857 2286000
-     -2000000 2286000 -2000000 2750000)
-    (connect (terminal pin UART-1) (terminal pin U1-16))
+   (wire (path BOT 76200  -9750000 3750000 -1500000 3750000 -1500000 2250000)
+    (connect (terminal pin UART-1) (terminal pin "ESP32 SIM 800"-16))
    )
    )
   )
