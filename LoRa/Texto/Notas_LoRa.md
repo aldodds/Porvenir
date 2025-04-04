@@ -79,9 +79,9 @@ void loop() {
 #include <LoRa.h>
 
 // Definición de pines
-#define LORA_RST 9
-#define LORA_SS 10
-#define LORA_DIO0 2
+#define LORA_RST 14
+#define LORA_SS 5
+#define LORA_DIO0 26
 
 // Direcciones de los dispositivos
 const byte GATEWAY_ADDRESS = 0x01;
@@ -211,20 +211,20 @@ void checkNodesStatus() {
 #include <LoRa.h>
 
 // Definición de pines
-#define LORA_RST 9
-#define LORA_SS 10
-#define LORA_DIO0 2
+#define LORA_RST 14
+#define LORA_SS 5
+#define LORA_DIO0 26
 #define SENSOR_PIN A0
 
 // Direcciones
-const byte NODE_ADDRESS = 0x02;  // Dirección del Nodo 1
+const byte NODE_ADDRESS = 0x02;  // Direccion del Nodo 1
 const byte GATEWAY_ADDRESS = 0x01;
 
 // Variables para el manejo de mensajes
 byte msgCount = 0;
 unsigned long lastSendTime = 0;
-const unsigned long sendInterval = 10000;  // Intervalo base de envío (10 segundos)
-const unsigned long randomInterval = 2000; // Variación aleatoria máxima
+const unsigned long sendInterval = 10000;  // Intervalo base de envio (10 segundos)
+const unsigned long randomInterval = 2000; // Variacion aleatoria maxima
 
 // Variables para el manejo de ACK
 bool waitingForAck = false;
@@ -330,7 +330,7 @@ void checkForAck() {
   if (millis() - ackWaitStart > ackTimeout) {
     Serial.println("Timeout de ACK para mensaje " + String(lastMsgId));
     waitingForAck = false;
-    // Aquí podrías implementar reintentos si lo deseas
+    // Aqui podrias implementar reintentos si lo deseas
   }
 }
 ```
@@ -341,21 +341,21 @@ void checkForAck() {
 #include <SPI.h>
 #include <LoRa.h>
 
-// Definición de pines
-#define LORA_RST 9
-#define LORA_SS 10
-#define LORA_DIO0 2
+// Definicion de pines
+#define LORA_RST 14
+#define LORA_SS 5
+#define LORA_DIO0 26
 #define SENSOR_PIN A0
 
 // Direcciones
-const byte NODE_ADDRESS = 0x03;  // Dirección del Nodo 2
+const byte NODE_ADDRESS = 0x03;  // Direccion del Nodo 2
 const byte GATEWAY_ADDRESS = 0x01;
 
 // Variables para el manejo de mensajes
 byte msgCount = 0;
 unsigned long lastSendTime = 0;
-const unsigned long sendInterval = 10000;  // Intervalo base de envío (10 segundos)
-const unsigned long randomInterval = 2000; // Variación aleatoria máxima
+const unsigned long sendInterval = 10000;  // Intervalo base de envio (10 segundos)
+const unsigned long randomInterval = 2000; // Variacion aleatoria maxima
 
 // Variables para el manejo de ACK
 bool waitingForAck = false;
@@ -378,7 +378,7 @@ void setup() {
     while (1);
   }
   
-  // Configurar parámetros LoRa
+  // Configurar parametros LoRa
   LoRa.setSpreadingFactor(7);
   LoRa.setSignalBandwidth(125E3);
   LoRa.setCodingRate4(5);
@@ -404,7 +404,7 @@ void loop() {
     sendSensorData();
   }
   
-  // Otras tareas del nodo pueden ir aquí
+  // Otras tareas del nodo pueden ir aqui
   // ...
 }
 
@@ -443,7 +443,7 @@ void checkForAck() {
     byte sender = LoRa.read();
     byte ackMsgId = LoRa.read();
     
-    // Verificar si es un ACK válido para nosotros
+    // Verificar si es un ACK valido para nosotros
     if (destination == NODE_ADDRESS && sender == GATEWAY_ADDRESS && ackMsgId == lastMsgId) {
       String ackPayload = "";
       while (LoRa.available()) {
@@ -606,7 +606,7 @@ void loop() {
     Serial.println("ACK no recibido.");
   }
 
-  // Intervalo aleatorio entre envíos
+  // Intervalo aleatorio entre envios
   delay(random(2000, 5000));
 }
 
@@ -628,7 +628,7 @@ void loop() {
 | DIO0  | GPIO26/25* |
 
 *Cambio de pines cuando se usa con el módulo LoRa SX1278 Ra-02
-
+  
 ## Código de verificación de módulo Ra-02
 
 ### Primera versión
@@ -665,7 +665,7 @@ void loop() {
 // Define los pines utilizados
 #define SS_PIN    5    // NSS
 #define RST_PIN   14   // Reset
-#define DIO0_PIN  2    // DIO0
+#define DIO0_PIN  26    // DIO0
 
 void setup() {
   Serial.begin(9600);
