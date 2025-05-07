@@ -2,16 +2,195 @@
 
 |Arduino | ESP32 | MUX 70HC4052|
 |:------:|:------:|:------:|
-|PWM 3 |GPIO 18/25/21 |B (9)     |
-|PWM 4 |GPIO 17/26/22 |A (10)    |
-|PWM 5 |GPIO 19/14    |X (13)    |
-|PWM 6 |GPIO 16/13/23 |Inh (6)   |
-|PWM 11|GPIO 23/27/18 |R 10 Kohm |
-|A1    |GPIO 34/      |Y (3)     |
+|PWM 3 |GPIO 18/25/21/26 |B (9)     |
+|PWM 4 |GPIO 17/26/22/33 |A (10)    |
+|PWM 5 |GPIO 19/14/32    |X (13)    |
+|PWM 6 |GPIO 16/13/23/27 |Inh (6)   |
+|PWM 11|GPIO 23/27/18/13 |R 10 Kohm |
+|A1    |GPIO 34          |Y (3)     |
 
 # Códigos
 
 ## Opción 1
+
+```C++
+// ------------------------------------------------------------
+// Código para lectura de sensores de humedad del suelo Watermark 200SS
+// usando un multiplexor 74HC4052 y un microcontrolador ESP32 (ESP-WROOM-32).
+// Se realiza una lectura pseudo CA (doble dirección) para evitar polarización,
+// se calcula la resistencia del sensor mediante un divisor resistivo,
+// y se convierte dicha resistencia a centibares (cb o kPa) de tensión del suelo.
+// El código está preparado para dos sensores, asumiendo una temperatura constante de 24°C.
+// ------------------------------------------------------------
+
+// --- Definición de Pines ESP32 ---
+const int MUX_INH_PIN = 27;     // Pin INH (inhabilitación) del 74HC4052
+const int MUX_A_PIN   = 33;     // Pin A de selección del canal en el multiplexor
+const int MUX_B_PIN   = 26;     // Pin B de selección del canal en el multiplexor
+const int EXCITE_1_PIN = 32;    // Pin que activa una dirección de corriente
+const int EXCITE_2_PIN = 13;    // Pin que activa la dirección opuesta de corriente
+const int ANALOG_READ_PIN = 34; // Pin analógico del ESP32 para leer el voltaje
+
+// --- Constantes del Circuito y Sensor ---
+const float Rx = 10000.0;       // Resistencia en serie de 10kΩ usada en el divisor
+const float SupplyV = 3.3;      // Voltaje de referencia (alimentación del sistema)
+const float ADC_MAX_VALUE = 4095.0; // Valor máximo del ADC del ESP32 (resolución de 12 bits)
+const int   NUM_OF_READS = 1;   // Número de lecturas por dirección (puede aumentarse si se desea promediar)
+const long  DEFAULT_TEMP_C = 24; // Temperatura fija asumida (en grados Celsius)
+
+// --- Constantes de Calibración y Límites ---
+const long  OPEN_RESISTANCE = 35000; // Resistencia que se considera circuito abierto
+const long  SHORT_RESISTANCE = 200;  // Resistencia que se considera cortocircuito
+const long  SHORT_CB = 240;          // Valor CB fijo si hay cortocircuito
+const long  OPEN_CB = 255;           // Valor CB fijo si hay circuito abierto
+const float C_FACTOR = 1.1;          // Factor de corrección de calibración
+
+// --- Variables Globales ---
+float WM1_Resistance = 0.0;    // Resistencia medida del Sensor 1
+float WM2_Resistance = 0.0;    // Resistencia medida del Sensor 2
+int   WM1_CB = 0;              // Valor CB (kPa) estimado del Sensor 1
+int   WM2_CB = 0;              // Valor CB (kPa) estimado del Sensor 2
+
+// --- Prototipos de Funciones ---
+float readWMsensor();                                 // Función para leer resistencia desde el sensor seleccionado
+int   myCBvalue(float res, float TC, float cF);       // Función para convertir resistencia a CB (kPa)
+
+// --- Configuración inicial ---
+void setup() {
+  Serial.begin(115200);                               // Inicia comunicación serial a 115200 baudios
+  Serial.println("Iniciando Lector de Sensores Watermark con ESP32 y 74HC4052");
+
+  pinMode(MUX_INH_PIN, OUTPUT);                       // Configura pin INH como salida
+  pinMode(MUX_A_PIN, OUTPUT);                         // Configura pin A como salida
+  pinMode(MUX_B_PIN, OUTPUT);                         // Configura pin B como salida
+  pinMode(EXCITE_1_PIN, OUTPUT);                      // Configura excitación 1 como salida
+  pinMode(EXCITE_2_PIN, OUTPUT);                      // Configura excitación 2 como salida
+
+  digitalWrite(MUX_INH_PIN, HIGH);                    // Deshabilita el multiplexor al inicio
+  digitalWrite(EXCITE_1_PIN, LOW);                    // Asegura que no haya corriente al inicio
+  digitalWrite(EXCITE_2_PIN, LOW);                    // Asegura que no haya corriente al inicio
+
+  delay(100);                                         // Espera breve
+  Serial.println("Setup completado.");
+}
+
+// --- Bucle principal ---
+void loop() {
+  Serial.println("\n--- Iniciando ciclo de lectura ---");
+
+  digitalWrite(MUX_INH_PIN, LOW);                     // Habilita el multiplexor
+  delay(1);                                           // Breve espera para estabilización
+
+  Serial.println("Seleccionando Sensor 1 (Canal 0)...");
+  digitalWrite(MUX_B_PIN, LOW);                       // Selección canal 0 (B=0, A=0)
+  digitalWrite(MUX_A_PIN, LOW);
+  delay(10);                                          // Espera tras cambiar canal
+  WM1_Resistance = readWMsensor();                    // Lee resistencia del Sensor 1
+  Serial.print("Resistencia Sensor 1 (Ohms): ");
+  Serial.println(WM1_Resistance);
+
+  Serial.println("Seleccionando Sensor 2 (Canal 1)...");
+  digitalWrite(MUX_B_PIN, LOW);                       // Selección canal 1 (B=0, A=1)
+  digitalWrite(MUX_A_PIN, HIGH);
+  delay(10);                                          // Espera tras cambiar canal
+  WM2_Resistance = readWMsensor();                    // Lee resistencia del Sensor 2
+  Serial.print("Resistencia Sensor 2 (Ohms): ");
+  Serial.println(WM2_Resistance);
+
+  digitalWrite(MUX_INH_PIN, HIGH);                    // Deshabilita el multiplexor
+  Serial.println("Mux Deshabilitado.");
+
+  WM1_CB = myCBvalue(WM1_Resistance, DEFAULT_TEMP_C, C_FACTOR);  // Convierte a CB el valor del sensor 1
+  WM2_CB = myCBvalue(WM2_Resistance, DEFAULT_TEMP_C, C_FACTOR);  // Convierte a CB el valor del sensor 2
+
+  Serial.println("\n--- Resultados Finales ---");
+  Serial.print("Temperatura asumida (C): ");
+  Serial.println(DEFAULT_TEMP_C);
+
+  Serial.print("Sensor 1: Resistencia=");
+  Serial.print(WM1_Resistance);
+  Serial.print(" Ohms, Tension=");
+  Serial.print(abs(WM1_CB));
+  Serial.println(" cb/kPa");
+
+  Serial.print("Sensor 2: Resistencia=");
+  Serial.print(WM2_Resistance);
+  Serial.print(" Ohms, Tension=");
+  Serial.print(abs(WM2_CB));
+  Serial.println(" cb/kPa");
+
+  Serial.println("\nEsperando para la proxima lectura...");
+  delay(2000);                                        // Espera 2 segundos antes de la siguiente lectura
+}
+
+// --- Función de lectura de sensor usando corriente alterna simulada ---
+float readWMsensor() {
+  float aRead_A1 = 0;          // Variable para acumular lectura A1
+  float aRead_A2 = 0;          // Variable para acumular lectura A2
+  float senVWM1 = 0;           // Voltaje calculado A1
+  float senVWM2 = 0;           // Voltaje calculado A2
+
+  for (int i = 0; i < NUM_OF_READS; i++) {
+    digitalWrite(EXCITE_2_PIN, LOW);                  // Apaga dirección 2
+    digitalWrite(EXCITE_1_PIN, HIGH);                 // Enciende dirección 1
+    delayMicroseconds(100);                           // Espera microsegundos para estabilización
+    aRead_A1 += analogRead(ANALOG_READ_PIN);          // Lee ADC
+    digitalWrite(EXCITE_1_PIN, LOW);                  // Apaga dirección 1
+    delay(100);                                       // Espera para evitar acumulación de carga
+
+    digitalWrite(EXCITE_1_PIN, LOW);                  // Asegura dirección 1 apagada
+    digitalWrite(EXCITE_2_PIN, HIGH);                 // Enciende dirección 2
+    delayMicroseconds(100);                           // Espera breve
+    aRead_A2 += analogRead(ANALOG_READ_PIN);          // Lee ADC
+    digitalWrite(EXCITE_2_PIN, LOW);                  // Apaga dirección 2
+  }
+
+  // Calcula voltaje promedio en ambas direcciones
+  senVWM1 = (aRead_A1 / ADC_MAX_VALUE) * SupplyV / (float)NUM_OF_READS;
+  senVWM2 = (aRead_A2 / ADC_MAX_VALUE) * SupplyV / (float)NUM_OF_READS;
+
+  // Calcula resistencia basada en división de voltaje
+  double WM_ResistanceA = (senVWM1 > 0) ? (Rx * (SupplyV - senVWM1) / senVWM1) : OPEN_RESISTANCE;
+  double WM_ResistanceB = (SupplyV - senVWM2 != 0) ? (Rx * senVWM2 / (SupplyV - senVWM2)) : OPEN_RESISTANCE;
+
+  // Promedia ambas resistencias
+  double WM_Resistance = (WM_ResistanceA + WM_ResistanceB) / 2.0;
+
+  return WM_Resistance;                                // Retorna resistencia promedio
+}
+
+// --- Función para convertir resistencia a tensión (CB/kPa) ---
+int myCBvalue(float res, float TC, float cF) {
+  int WM_CB;
+  float resK = res / 1000.0;                           // Convierte a kilo-ohmios
+  float tempD = 1.00 + 0.018 * (TC - 24.00);           // Ajuste por temperatura
+
+  if (res > 550.0) {
+    if (res > 8000.0) {
+      WM_CB = (-2.246 - 5.239 * resK * tempD - 0.06756 * resK * resK * (tempD * tempD)) * cF;
+    } else if (res > 1000.0) {
+      WM_CB = (-3.213 * resK - 4.093) / (1 - 0.009733 * resK - 0.01205 * TC) * cF;
+    } else {
+      WM_CB = (resK * 23.156 - 12.736) * tempD;
+    }
+  } else {
+    if (res > 300.0) {
+      WM_CB = 0;                                       // Baja humedad = suelo saturado
+    } else if (res < 300.0 && res >= SHORT_RESISTANCE) {
+      WM_CB = SHORT_CB;                                // Cortocircuito
+      Serial.print("Sensor Short WM\n");
+    }
+  }
+
+  if (res >= OPEN_RESISTANCE || res == 0) {
+    WM_CB = OPEN_CB;                                   // Circuito abierto
+  }
+
+  return WM_CB;                                        // Retorna valor CB estimado
+}
+```
+
+## Opción 2
 
 ```C++
 #include <math.h> // Incluye la biblioteca matemática (aunque no se usa activamente sin el sensor de temperatura)
