@@ -9,6 +9,43 @@
 |PWM 11|GPIO 23/27/18/13 |R 10 Kohm |
 |A1    |GPIO 34          |Y (3)     |
 
+# Mediciones previas
+
+Medir las variables para mejorar la precisión de la lectura de las resistencias:
+
+- Resistencia del resistor 10 KOhm (divisor)
+- Voltaje de entrada 3.3 V
+- Resistencia del multiplexor
+1. Desconectar los sensores
+2. Cargar el siguiente código
+```C++
+// Este código configura el multiplexor en Canal 0 y te permite medir Ron (resistencia del canal) con el multímetro:
+// --- Pines del multiplexor 74HC4052 ---
+const int MUX_INH_PIN = 27;     // Pin INH (inhabilitación)
+const int MUX_A_PIN   = 33;     // Pin A de selección
+const int MUX_B_PIN   = 26;     // Pin B de selección
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(MUX_INH_PIN, OUTPUT);
+  pinMode(MUX_A_PIN, OUTPUT);
+  pinMode(MUX_B_PIN, OUTPUT);
+
+  // Configura el multiplexor en CANAL 0 (A=0, B=0)
+  digitalWrite(MUX_INH_PIN, LOW);    // Habilita el multiplexor
+  digitalWrite(MUX_A_PIN, LOW);      // A = 0
+  digitalWrite(MUX_B_PIN, LOW);      // B = 0
+
+  Serial.println("Multiplexor configurado en CANAL 0. Mide la resistencia entre Y (pin común) y EXCITE_1_PIN o EXCITE_2_PIN con el multímetro.");
+}
+
+void loop() {
+  // Nada aquí. Solo mantener la configuración.
+}
+
+```
+3. En el multiplexor, medir entre el terminal 3 (Salida, cómun, Y) y el terminal 1 que corresponde a Y
+
 # Códigos
 
 ## Opción 1
@@ -35,7 +72,7 @@ const int ANALOG_READ_PIN = 34; // Pin analógico del ESP32 para leer el voltaje
 const float Rx = 10000.0;       // Resistencia en serie de 10kΩ usada en el divisor
 const float SupplyV = 3.3;      // Voltaje de referencia (alimentación del sistema)
 const float ADC_MAX_VALUE = 4095.0; // Valor máximo del ADC del ESP32 (resolución de 12 bits)
-const int   NUM_OF_READS = 5;   // Número de lecturas por dirección (aumentado para mejor precisión)
+const int   NUM_OF_READS = 20;   // Número de lecturas por dirección (aumentado para mejor precisión)
 const long  DEFAULT_TEMP_C = 24; // Temperatura fija asumida (en grados Celsius)
 const bool  USE_TEMP_SENSOR = false; // Cambiar a true si se utiliza sensor de temperatura
 
