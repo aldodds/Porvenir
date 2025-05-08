@@ -44,7 +44,7 @@ void loop() {
 }
 
 ```
-3. En el multiplexor, medir entre el terminal 3 (Salida, cómun, Y) y el terminal 1 que corresponde a Y0
+3. En el multiplexor, medir entre el terminal 3 (Salida, cómun, Y) y el terminal 1 que corresponde a Y0. También, es posible medir entre el terminal 13 (Salida, cómun, Y) y canal 12 (Salida, cómun, X)
 
 # Códigos
 
@@ -70,6 +70,7 @@ const int ANALOG_READ_PIN = 34; // Pin analógico del ESP32 para leer el voltaje
 
 // --- Constantes del Circuito y Sensor ---
 const float Rx = 10000.0;       // Resistencia en serie de 10kΩ usada en el divisor
+const float MUX_RESISTANCE = 86.0;  // Resistencia medida del multiplexor (86Ω)
 const float SupplyV = 3.3;      // Voltaje de referencia (alimentación del sistema)
 const float ADC_MAX_VALUE = 4095.0; // Valor máximo del ADC del ESP32 (resolución de 12 bits)
 const int   NUM_OF_READS = 20;   // Número de lecturas por dirección (aumentado para mejor precisión)
@@ -305,8 +306,10 @@ float readWMsensor() {
   // Promedia ambas resistencias
   double WM_Resistance = (WM_ResistanceA + WM_ResistanceB) / 2.0;
 
-  // Resta la resistencia extra de 200 ohmios introducida por las resistencias en serie del circuito de proteccion
-  WM_Resistance = WM_Resistance - 200.0;
+  // Compensación total:
+  // - 200Ω (resistencias externas)
+  // - 172Ω (2 * 86Ω del multiplexor, ida y vuelta)
+  WM_Resistance = WM_Resistance - 200.0 - (2 * MUX_RESISTANCE);
 
   // Limitar a valores razonables
   if (WM_Resistance > OPEN_RESISTANCE) WM_Resistance = OPEN_RESISTANCE;
