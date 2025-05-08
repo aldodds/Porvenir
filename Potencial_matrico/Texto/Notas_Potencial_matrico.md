@@ -268,6 +268,9 @@ float readWMsensor() {
   // Promedia ambas resistencias
   double WM_Resistance = (WM_ResistanceA + WM_ResistanceB) / 2.0;
 
+  // Resta la resistencia extra de 200 ohmios introducida por las resistencias en serie del circuito de proteccion
+  WM_Resistance = WM_Resistance - 200.0;
+
   // Limitar a valores razonables
   if (WM_Resistance > OPEN_RESISTANCE) WM_Resistance = OPEN_RESISTANCE;
   if (WM_Resistance < SHORT_RESISTANCE) WM_Resistance = SHORT_RESISTANCE;
