@@ -44,7 +44,7 @@ void loop() {
 }
 
 ```
-3. En el multiplexor, medir entre el terminal 3 (Salida, cómun, Y) y el terminal 1 que corresponde a Y
+3. En el multiplexor, medir entre el terminal 3 (Salida, cómun, Y) y el terminal 1 que corresponde a Y0
 
 # Códigos
 
